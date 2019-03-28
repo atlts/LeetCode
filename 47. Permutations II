@@ -1,0 +1,54 @@
+Java 1ms beats 100%
+Description:
+
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+Example:
+
+Input: [1,1,2]
+Output:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+
+
+Solution:
+
+
+Almost exactly the same as the 46
+just make sure you won't choose the same number int every single funtion's for(),just read the annotation
+
+import java.util.*;
+
+class Solution {
+    List<List<Integer>> ans = new ArrayList<>();
+
+    //A dfs recursion generate all kinds of permutations
+    public void getList(List<Integer> list,int[] nums,boolean[] flag,int cnt){
+        if(cnt == nums.length){//if the whole nums have been put into list
+            ans.add(new ArrayList<>(list));
+            return ;
+        }
+
+        for(int i = 0;i < nums.length;i++){
+            if(i > 0 && nums[i] == nums[i - 1] && !flag[i - 1]) continue;//make sure you won't choose the same number int every single funtion's for()
+            if(flag[i]) continue;
+      
+            flag[i] = true;
+            list.add(nums[i]);
+            getList(list,nums,flag,cnt + 1);
+            list.remove(list.size() - 1);//easy way to use only ont list and flags
+            flag[i] = false;
+        }
+    }
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        Arrays.sort(nums);
+        ans.clear();
+        boolean []flag = new boolean[nums.length + 1];//To mark every member of nums has been used or not
+        for(int i = 0;i < nums.length + 1;i++) flag[i] = false;
+        getList(new ArrayList<Integer>(),nums,flag,0);
+        return ans;
+    }
+}
