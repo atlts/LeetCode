@@ -1,0 +1,47 @@
+Description
+
+Given an input string (s) and a pattern (p), implement regular expression matching with support for '.' and '*'.
+
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+The matching should cover the entire input string (not partial).
+
+Note:
+
+s could be empty and contains only lowercase letters a-z.
+p could be empty and contains only lowercase letters a-z, and characters like . or *.
+
+
+Solution:
+A recursive solution is a straightforward way to represent this relationship.
+watch the code for more information
+class Solution {
+    public boolean isMatch(String s, String p) {
+        if(p.length() == 0) return s.isEmpty();
+        boolean first = (!s.isEmpty()) && (s.charAt(0) == p.charAt(0) || p.charAt(0) == '.') ? true: false;//check if the first one matches
+        if(p.length() >= 2 && p.charAt(1) =='*') return ((first && isMatch(s.substring(1),p)) || isMatch(s,p.substring(2))
+        );//if the second is a '*' ,we can choose keep the first one or not,very clear logic
+        else return (first && isMatch(s.substring(1),p.substring(1)));
+    }
+}
+
+The following is the dp:
+
+
+class Solution {
+    
+    public boolean isMatch(String s, String p) {
+        if(p.length() == 0) return s.isEmpty();
+        boolean [][]dp = new boolean [s.length() + 1][p.length() + 1];
+        dp[s.length()][p.length()] = true;
+        for(int i = s.length() ; i >= 0;i--)
+            for(int j = p.length() - 1;j >= 0;j--){
+                boolean first = (i < s.length()) && (s.charAt(i) == p.charAt(j) || p.charAt(j) == '.');
+                if(j + 1 < p.length() && p.charAt(j + 1) == '*') dp[i][j] = (first && dp[i + 1][j]) || dp[i][j + 2];
+                else dp[i][j] = (first && dp[i + 1][j + 1]);
+            }
+        return dp[0][0];
+    }
+}
+
+Almost the same，but dp saved a lot of time, maybe because strings dosen't have to change
