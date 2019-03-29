@@ -1,0 +1,71 @@
+You are given a string, s, and a list of words, words, that are all of the same length. Find all starting indices of substring(s) in s that is a concatenation of each word in words exactly once and without any intervening characters.
+
+Example 1:
+
+Input:
+  s = "barfoothefoobarman",
+  words = ["foo","bar"]
+Output: [0,9]
+Explanation: Substrings starting at index 0 and 9 are "barfoor" and "foobar" respectively.
+The output order does not matter, returning [9,0] is fine too.
+
+
+Solution:
+
+Just do the simulation
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        if (words.length == 0 || s.length() == 0) return new ArrayList<Integer>();
+        List<Integer> ans = new ArrayList<>();//the collection of results
+		Map<String, Integer> map = new HashMap<>();//record how many  times every word appear in words
+        int len = words[0].length();
+        for (int i = 0; i < words.length; i++) {
+            if (!map.containsKey(words[i])) map.put(words[i], 1);
+            else map.put(words[i], map.get(words[i]) + 1);
+        }
+        for (int j = 0; j < len; j++) {//it's like the operation mod,we can  add len to i after we do this for()
+            int start = j;//the posibble start of the right string
+            int count = 0;//record how many words appeared in the string we  are using
+            Map<String, Integer> currentMap = new HashMap<String, Integer>();//record how many times every word appears in the  string we are using
+            for (int i = j; i <= s.length() - len; i += len) {
+                String sNow = s.substring(i, i + len);
+                if (map.containsKey(sNow)) {
+                    if (currentMap.containsKey(sNow)) currentMap.put(sNow, currentMap.get(sNow) + 1);
+                    else currentMap.put(sNow, 1);
+                    count++;
+                    if (map.get(sNow) < currentMap.get(sNow)) {
+                        boolean flag = true;
+                        while(flag) {
+                            String sHead = s.substring(start, start + len);
+                            currentMap.put(sHead, currentMap.get(sHead) - 1);
+                            count--;
+                            start = start + len;
+                            if(sHead.equals(sNow)) flag = false;
+                        }
+                        continue;
+                    }
+                  //  count++;
+                    if (count == words.length) {
+                        ans.add(start);
+                        String sHead = s.substring(start, start + len);
+                        currentMap.put(sHead, currentMap.get(sHead) - 1);
+                        count--;
+                        start += len;
+                        continue;
+                    }
+                } else {
+                    currentMap.clear();
+                    count = 0;
+                    start = i + len;
+                }
+
+            }
+        }
+        return ans;
+    }
+}
