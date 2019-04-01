@@ -1,0 +1,67 @@
+Description:
+
+Write a program to solve a Sudoku puzzle by filling the empty cells.
+
+A sudoku solution must satisfy all of the following rules:
+
+Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+Empty cells are indicated by the character '.'.
+
+
+A sudoku puzzle...
+
+
+Solution:
+2ms
+A simple recursion
+I really can't figure out why I waste so long...
+
+
+class Solution {
+    public void solveSudoku(char[][] board) {
+        //left numbers of a certain row
+        boolean[][] rowHas = new boolean[9][9];
+        //left numbers of a certain column
+        boolean[][] colHas = new boolean[9][9];
+        boolean[][] boxHas = new boolean[9][9];
+        for (int i = 0 ; i < 9 ; i++) {
+            for (int j = 0 ; j < 9 ; j++) {
+                if (board[i][j] != '.') {
+                    rowHas[i][board[i][j]-'1'] = true;
+                    colHas[j][board[i][j]-'1'] = true;
+                    boxHas[(i/3)*3+j/3][board[i][j]-'1'] = true;
+                }
+            }
+        }
+        btHelper(board, 0, 0, rowHas, colHas, boxHas);
+    }
+    private boolean btHelper(char[][] board, int i, int j, boolean[][] rowHas, boolean[][] colHas, boolean[][] boxHas) {
+        for (int x = i ; x < 9 ; x++) {
+            for (int y = (x==i)?j:0 ; y < 9 ; y++) {
+                if (board[x][y] == '.') {
+                    for (int num = 1 ; num <= 9 ; num++) {
+                        if (!rowHas[x][num-1] && !colHas[y][num-1] && 
+                            !boxHas[(x/3)*3+y/3][num-1]) {
+                            board[x][y] = (char)(num+'0');                            
+                            rowHas[x][num-1] = true;
+                            colHas[y][num-1] = true;
+                            boxHas[(x/3)*3+y/3][num-1] = true;
+                            if (btHelper(board, x, y, rowHas, colHas, boxHas)) {
+                                //System.out.println(x+","+y+","+board[x][y]);
+                                return true;
+                            }
+                            board[x][y] = '.';
+                            rowHas[x][num-1] = false;
+                            colHas[y][num-1] = false;
+                            boxHas[(x/3)*3+y/3][num-1] = false;
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
