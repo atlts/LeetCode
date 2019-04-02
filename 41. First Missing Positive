@@ -1,0 +1,33 @@
+Description:
+
+Given an unsorted integer array, find the smallest missing positive integer.
+
+Example 1:
+
+Input: [1,2,0]
+Output: 3
+
+Solution:
+Time complexity : O(n) 0ms
+
+
+Assume the array's size is n,we can throw away any element that is bigger than n and record element that is bigger than 0 and smaller than or equal to n.Then we can set id = 1 at first ,when id appears in nums,we just add 1 to id, and check if it has appeared
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        if(nums.length == 0) return 1;
+        boolean []ans = new boolean[nums.length + 3];
+        int id = 1;
+        for(int i = 0;i < nums.length;i++){
+            if(nums[i] == id){
+                ans[id] = true;
+                while(true){
+                    if(ans[id])    id++;
+                    else break;    
+            }
+        }
+            else if(nums[i] > 0 && nums[i] <= nums.length) ans[nums[i]] = true;
+        }
+        return id;
+    }
+}
