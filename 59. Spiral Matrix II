@@ -1,0 +1,43 @@
+Description:
+
+Given a positive integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+
+Example:
+
+Input: 3
+Output:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+
+Simulation:
+
+simple simulation
+
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int [][]direction ={{0,1,},{1,0},{0,-1},{-1,0}};
+        boolean [][]flag = new boolean[n][n];
+        int [][]ans = new int[n][n];
+        int cnt = 1,dir = 0,x = 0,y = 0;
+        while(true){
+            if(cnt > n * n) break;
+            if(x < 0 || x >= n || y < 0 || y >= n || flag[x][y]){
+                x -= direction[dir][0];
+                y -= direction[dir][1];
+                dir += 1;
+                dir %= 4;
+                x += direction[dir][0];
+                y += direction[dir][1];
+                continue;
+            }
+            flag[x][y] = true;
+            ans[x][y] = cnt++;
+            x += direction[dir][0];
+            y += direction[dir][1];
+        }
+        return ans;
+    }
+}
