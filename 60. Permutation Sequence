@@ -1,0 +1,59 @@
+Description:
+
+The set [1,2,3,...,n] contains a total of n! unique permutations.
+
+By listing and labeling all of the permutations in order, we get the following sequence for n = 3:
+
+"123"
+"132"
+"213"
+"231"
+"312"
+"321"
+Given n and k, return the kth permutation sequence.
+
+Note:
+
+Given n will be between 1 and 9 inclusive.
+Given k will be between 1 and n! inclusive.
+Example 1:
+
+Input: n = 3, k = 3
+Output: "213"
+
+Solution；
+
+
+
+find the number that you should put in the right position in every turn,read the code for more information
+
+class Solution {
+    public static int getPow(int n){
+        if(n == 0) return 1;
+        return n == 1 ? n : n * getPow(n - 1);
+    }
+    public String getPermutation(int n, int k) {
+        int []nums = new int[10];
+        for(int i = 1;i <= n;i++) nums[i] = i;
+        int cnt = 0;//how many numbers we have found
+        StringBuilder ans = new StringBuilder();
+        while(true){
+            if(cnt == n) break;
+            int pos1 = k /getPow(n - cnt - 1),pos2 = k % getPow(n - cnt - 1);
+            int num =pos1 + (pos2 == 0 ? 0 : 1);//the numth number int the array which has not been used is what we want
+            for(int i = 1;i <= n;i++){
+                if(nums[i] <= n){
+                    num--;
+                    if(num == 0) {
+                        ans.append(nums[i]);
+                        nums[i] = n + 1;
+                    }
+                }
+            }
+            k %= getPow(n - cnt - 1);
+            if(k == 0) k = getPow(n - cnt - 1);
+            cnt++;
+        }
+        return ans.toString();
+    }
+}
