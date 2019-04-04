@@ -1,0 +1,55 @@
+Description:
+
+Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*'.
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+The matching should cover the entire input string (not partial).
+
+Note:
+
+s could be empty and contains only lowercase letters a-z.
+p could be empty and contains only lowercase letters a-z, and characters like ? or *.
+Example 1:
+
+Input:
+s = "aa"
+p = "a"
+Output: false
+Explanation: "a" does not match the entire string "aa".
+
+
+Solution:
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        if(p.length() == 0){
+            if(s.length() == 0) return true;
+            else return false;
+        }
+        if(s.length() == 0){
+            for(char c : p.toCharArray()){
+                if(c != '*') return false;
+            }
+            return true;
+        }
+        int ls = s.length(),ps = p.length();
+        boolean [][]dp = new boolean[ls + 1][ps + 1];
+        dp[ls][ps] = true;
+      //  dp[ls][ps - 1] = true;
+        for(int j = ps - 1;j >= 0;j--)
+            if(p.charAt(j) == '*') dp[ls][j] = dp[ls][j+1];
+        for(int i = ls - 1;i >= 0;i--){
+            for(int j = ps - 1;j >= 0;j--){
+                if(p.charAt(j) != '*'){
+                    if(s.charAt(i) == p.charAt(j) || p.charAt(j) == '?') dp[i][j] = dp[i + 1][j + 1];
+                }
+                else{
+                    dp[i][j] = dp[i + 1][j] || dp[i][j + 1];
+                }
+              //  System.out.println(i + " " + j + " " + dp[i][j]);
+            }
+        }
+        return dp[0][0];
+    }
+}
