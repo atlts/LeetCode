@@ -1,0 +1,80 @@
+Description:
+
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+
+
+
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+
+Example:
+
+Input: 4
+Output: [
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.
+
+Solution:
+just remember that  For all "hill" diagonals row + column = const, and for all "dale" diagonals row - column = const.
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public List<List<String>> ans = new ArrayList();
+    public void setBool(int x,int y,int [][]flag,int mk,int n,int []flagy){
+        boolean  flag1 = mk == 1? true:false;;
+        if(flag1){
+            flagy[y]++;
+            flag[0][x + y]++;
+            flag[1][x - y + 2 * n]++;
+        }
+        else{
+            flagy[y]--;
+            flag[0][x + y]--;
+            flag[1][x - y + 2 * n]--;
+        }
+       
+    }
+    public void findSolution(int cnt,int [][]flag,int n,int[] flagy,List<String>now){
+        if(cnt == n){
+            List<String> newString = new ArrayList<>(now);
+            ans.add(newString);
+          //  for(String str:newString) System.out.println(str);
+          //  System.out.println("========================");
+            return;
+        }
+        for(int i = 0; i < n;i++){
+           // if(flagy[i] > 0) continue;
+            if(flagy[i] > 0 || flag[0][cnt+i] > 0 || flag[1][cnt - i + 2 * n] > 0) continue;
+            StringBuilder nowString = new StringBuilder();
+            for(int j = 0;j < n;j++){
+                if(j == i) nowString.append('Q');
+                else nowString.append('.');
+            }
+            // System.out.println(cnt + " " + nowString);
+            now.add(nowString.toString());
+            setBool(cnt,i,flag,1,n,flagy);
+            findSolution(cnt + 1,flag,n,flagy,now);
+            setBool(cnt,i,flag,0,n,flagy);
+            now.remove(now.size() - 1);
+        }
+    }
+    public List<List<String>> solveNQueens(int n) {
+        ans.clear();
+        int [][]flag = new int[2][n*4];
+        int []flagy = new int[n];
+        findSolution(0,flag,n,flagy,new ArrayList<String>());
+        return ans;
+    }
+}
