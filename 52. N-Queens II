@@ -1,0 +1,69 @@
+Description:
+
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+
+
+
+Given an integer n, return the number of distinct solutions to the n-queens puzzle.
+
+Example:
+
+Input: 4
+Output: 2
+Explanation: There are two distinct solutions to the 4-queens puzzle as shown below.
+[
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+
+Solution:
+
+class Solution {
+    public int ans = 0;
+    public void setBool(int x,int y,int [][]flag,int mk,int n,int []flagy){
+        boolean  flag1 = mk == 1? true:false;;
+        if(flag1){
+            flagy[y]++;
+            flag[0][x + y]++;
+            flag[1][x - y + 2 * n]++;
+        }
+        else{
+            flagy[y]--;
+            flag[0][x + y]--;
+            flag[1][x - y + 2 * n]--;
+        }
+       
+    }
+    public void findSolution(int cnt,int [][]flag,int n,int[] flagy){
+        if(cnt == n){
+            ans++;
+            return;
+        }
+        for(int i = 0; i < n;i++){
+           // if(flagy[i] > 0) continue;
+            if(flagy[i] > 0 || flag[0][cnt+i] > 0 || flag[1][cnt - i + 2 * n] > 0) continue;
+          
+           
+            // System.out.println(cnt + " " + nowString);
+          
+            setBool(cnt,i,flag,1,n,flagy);
+            findSolution(cnt + 1,flag,n,flagy);
+            setBool(cnt,i,flag,0,n,flagy);
+        
+        }
+    }
+    public int totalNQueens(int n) {
+        ans = 0;
+        int [][]flag = new int[2][n*4];
+        int []flagy = new int[n];
+        findSolution(0,flag,n,flagy);
+        return ans;
+    }
+}
