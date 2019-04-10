@@ -1,0 +1,37 @@
+Description:
+
+Given a sorted array nums, remove the duplicates in-place such that duplicates appeared at most twice and return the new length.
+
+Do not allocate extra space for another array, you must do this by modifying the input array in-place with O(1) extra memory.
+
+Example 1:
+
+Given nums = [1,1,1,2,2,3],
+
+Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3 respectively.
+
+It doesn't matter what you leave beyond the returned length.
+
+Solution:
+
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        if(nums.length <= 2) return nums.length;
+        int pos = 0,run = 1;//pos means the valid array for now,run means the part of initial array that has been scanned
+        boolean flag = false;
+        for(int i = 1;i < nums.length;i++){
+            if(nums[i] == nums[i - 1]){
+                if(!flag){//if there are only two equal numbers 
+                nums[++pos] = nums[i];
+                flag = true;
+                }
+            }
+            else{
+                flag = false;
+                nums[++pos] = nums[i];
+            }
+            run++;
+        }
+        return pos + 1;
+    }
+}
