@@ -1,0 +1,17 @@
+题目描述：
+写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号。
+
+题解：
+
+解法应该很直观，ans因为num2中1的数量显然不可能是增多或者不变，只会是减少，所以必定会到0
+public class Solution {
+    public int Add(int num1,int num2) {
+            while(num2 != 0){
+          int sum = num1 ^ num2;
+          int ans = (num1 & num2) << 1;
+          num1 = sum;
+          num2 = ans;
+        }
+      return num1;
+    }
+}
