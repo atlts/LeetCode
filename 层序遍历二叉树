@@ -1,0 +1,25 @@
+题目描述：
+从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
+题解：
+import java.util.ArrayList;
+
+public class Solution {
+    ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>>ans = new ArrayList<>();
+        if(pRoot == null) return ans;
+        ArrayList<TreeNode>nodeList = new ArrayList<>();
+        nodeList.add(pRoot);
+        while(!nodeList.isEmpty()){
+            ArrayList<TreeNode>newList = new ArrayList<>();
+            ArrayList<Integer>newInt = new ArrayList<>();
+            for(TreeNode node : nodeList){
+                if(node.left != null) newList.add(node.left);
+                if(node.right != null) newList.add(node.right);
+                newInt.add(node.val);
+            }
+            ans.add(newInt);
+            nodeList = newList;
+        }
+        return ans;
+    }
+}
