@@ -1,0 +1,36 @@
+题目描述：
+请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。
+题解：
+public class Solution {
+    public ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+      ArrayList<ArrayList<Integer>>ans = new ArrayList<>();
+      if(pRoot == null) return ans;
+        Stack<TreeNode>queue = new Stack<>();
+        Stack<TreeNode> stack = new Stack<>();
+        
+        int mk = 0;
+        queue.push(pRoot);
+        while((!queue.isEmpty()) || (!stack.isEmpty())){
+            ArrayList<Integer>now = new ArrayList<>();
+            if(mk % 2 == 0){
+                while(!queue.isEmpty()){
+                    TreeNode node = queue.peek();
+                    if(node.left != null) stack.push(node.left);
+                    if(node.right != null) stack.push(node.right);
+                    now.add(queue.pop().val);
+                }
+            }
+            else{
+                while(!stack.empty()){
+                    TreeNode node = stack.peek();
+                    if(node.right != null) queue.push(node.right);
+                    if(node.left != null) queue.push(node.left);
+                    now.add(stack.pop().val);
+                }
+            }
+            mk++;
+            if(!now.isEmpty()) ans.add(now);
+        }
+        return ans;
+    }
+}
