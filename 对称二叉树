@@ -1,0 +1,22 @@
+题目描述：
+请实现一个函数，用来判断一颗二叉树是不是对称的。
+注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
+题解：
+import java.util.ArrayList;
+
+public class Solution {
+    public boolean checkEqual(TreeNode left,TreeNode right){
+      if(left == null){
+        if(right == null) return true;
+        else return false;
+      }
+      if(right == null) return false;
+      if(left.val != right.val) return false;
+      return checkEqual(left.right,right.left) && checkEqual(left.left,right.right);
+    }
+    boolean isSymmetrical(TreeNode pRoot)
+    {
+        if(pRoot == null) return true;
+        return checkEqual(pRoot.left,pRoot.right);
+    }
+}
