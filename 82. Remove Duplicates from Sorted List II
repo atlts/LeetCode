@@ -1,0 +1,31 @@
+Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+Example 1:
+
+Input: 1->2->3->3->4->4->5
+Output: 1->2->5
+
+Solution:
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+   if(head == null) return null;
+        ListNode pre = new ListNode(0);
+        ListNode st = head,stPre;
+        pre.next = head;
+        stPre = pre;
+        
+        while(st.next != null){
+                if(st.next.val == st.val){
+                    int val = st.val;
+                    while(st != null &&st.val == val) st = st.next;
+                    stPre.next = st;
+                    if(st == null) break;  
+                    continue;
+                }
+                stPre = st;
+                st = st.next;
+                if(st == null) break;
+        }
+        return pre.next;
+    }
+}
