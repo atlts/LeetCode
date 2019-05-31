@@ -11,23 +11,20 @@ Solution:
 Time complexity : O(n) 0ms
 
 
-Assume the array's size is n,we can throw away any element that is bigger than n and record element that is bigger than 0 and smaller than or equal to n.Then we can set id = 1 at first ,when id appears in nums,we just add 1 to id, and check if it has appeared
-
 class Solution {
     public int firstMissingPositive(int[] nums) {
         if(nums.length == 0) return 1;
-        boolean []ans = new boolean[nums.length + 3];
-        int id = 1;
         for(int i = 0;i < nums.length;i++){
-            if(nums[i] == id){
-                ans[id] = true;
-                while(true){
-                    if(ans[id])    id++;
-                    else break;    
+            if(nums[i] != i + 1 && nums[i] >= 1 && nums[i] <= nums.length && nums[nums[i] - 1] != nums[i]){
+                int temp = nums[i];
+                nums[i] = nums[temp - 1];
+                nums[temp - 1] = temp;
+                i--;
             }
         }
-            else if(nums[i] > 0 && nums[i] <= nums.length) ans[nums[i]] = true;
+        for(int i = 0;i < nums.length;i++){
+            if(nums[i] != i + 1) return i + 1;
         }
-        return id;
+        return nums.length + 1;
     }
 }
