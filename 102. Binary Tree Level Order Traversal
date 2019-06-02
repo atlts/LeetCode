@@ -1,0 +1,36 @@
+Description:
+Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+
+For example:
+Given binary tree [3,9,20,null,null,15,7],
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its level order traversal as:
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+
+Solution:
+DFS一下，把层次也作为参数传进去，只有当进入下一层的时候才需要进行扩充集合
+
+class Solution {
+    public void getList(List<List<Integer>>ans,int level,TreeNode root){
+        if(root == null) return;
+        if(ans.size() == level) ans.add(new LinkedList<Integer>());
+        ans.get(level).add(root.val);
+        getList(ans,level + 1,root.left);
+        getList(ans,level + 1,root.right);
+    }
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>>res = new ArrayList<>();
+        getList(res,0,root);
+        return res;
+    }
+}
+
+The code explains itself
